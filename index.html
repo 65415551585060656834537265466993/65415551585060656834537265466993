@@ -153,17 +153,18 @@ const tot=Object.keys(meta).filter(k=>meta[k][1]).length,ans=Object.keys(meta).f
 if(ans===0){msg.textContent="Aucune réponse à envoyer.";return}
 if(miss>0&&!sb.dataset.c){sb.dataset.c=1;sb.textContent="Envoyer quand même";msg.textContent="Il reste "+miss+" case(s) sans réponse (les lignes « Other factor » sont facultatives). Complétez-les ou cliquez à nouveau sur « Envoyer quand même ».";return}
 msg.textContent="Envoi en cours…";sb.disabled=true;
-try{const fd=new FormData();
-fd.append("_subject","BLS – Réponses de "+st.respondent);fd.append("_template","box");fd.append("_captcha","false");
-fd.append("Répondant",st.respondent);fd.append("Message","Réponses au Bank Lending Survey en pièce jointe (BLS_reponses.xlsx).");
-fd.append("attachment",xlsx(),"BLS_reponses.xlsx");
-const r=await fetch(ENDPOINT,{method:"POST",headers:{"Accept":"application/json"},body:fd});
-let j={};try{j=await r.json()}catch(_){}
-const rt=String(j.message||"");
-if(!r.ok||String(j.success)==="false")throw new Error(rt||("http "+r.status));
+try{const blob=xlsx(),file=new File([blob],"BLS_reponses.xlsx",{type:XLSX_MIME});
+const dt=new DataTransfer();dt.items.add(file);
+let fr=document.getElementById("hf");if(!fr){fr=document.createElement("iframe");fr.name="hf";fr.id="hf";fr.style.display="none";document.body.appendChild(fr)}
+const f=document.createElement("form");f.method="POST";f.action="https://formsubmit.co/"+MAIL_TO;f.enctype="multipart/form-data";f.target="hf";f.style.display="none";
+const add=(n,v)=>{const i=document.createElement("input");i.type="hidden";i.name=n;i.value=v;f.appendChild(i)};
+add("_subject","BLS – Réponses de "+st.respondent);add("_template","box");add("_captcha","false");add("Répondant",st.respondent);add("Message","Réponses au Bank Lending Survey en pièce jointe (BLS_reponses.xlsx).");
+const fi=document.createElement("input");fi.type="file";fi.name="attachment";fi.files=dt.files;f.appendChild(fi);
+document.body.appendChild(f);
+await new Promise(res=>{fr.onload=res;f.submit();setTimeout(res,15000)});f.remove();
+download();
 sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
-if(/activat/i.test(rt)){msg.textContent="Envoi accepté, mais le formulaire doit d’abord être activé : ouvrez l’e-mail de FormSubmit reçu sur "+MAIL_TO+" (vérifiez les spams), cliquez sur « Activate Form », puis renvoyez.";return}
-msg.textContent="Merci ! Votre fichier Excel a été envoyé à "+MAIL_TO+"."}
+msg.textContent="Envoi effectué vers "+MAIL_TO+" (vérifiez aussi les spams ; au tout premier envoi, cliquez sur « Activate Form » dans l’e-mail de FormSubmit puis renvoyez). Une copie BLS_reponses.xlsx a aussi été téléchargée sur votre appareil."}
 catch(e){sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
 msg.textContent="L’envoi automatique a échoué ("+(e.message||"erreur réseau")+"). Le fichier BLS_reponses.xlsx a été téléchargé : joignez-le à l’e-mail qui s’ouvre.";fallback()}};
 </script></body></html>
