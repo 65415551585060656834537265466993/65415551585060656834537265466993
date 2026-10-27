@@ -39,7 +39,7 @@ sup.fn{cursor:pointer;color:var(--ac);font-weight:600}
 <div class="sub" id="pg" style="margin-top:6px"></div>
 <div id="qs"></div>
 <details class="q" id="defs"><summary><b>Définitions et indications</b></summary><div id="deflist"></div></details>
-<div class="bar"><button id="b6">Finaliser et envoyer</button><button id="bdl" class="sec" type="button">Télécharger mes réponses (.txt)</button><span class="sub" id="msg"></span></div>
+<div class="bar"><button id="b6">Finaliser et envoyer</button><span class="sub" id="msg"></span></div>
 </main>
 <script>
 const SYM=["– –","–","○","+","+ +","S.O"];
@@ -50,16 +50,16 @@ let st={};try{st=JSON.parse(localStorage.getItem("blsq")||"{}")}catch(e){}
 const meta={},esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
 const rad=(nm,v,lab)=>`<input type=radio name="${nm}" value="${v}" ${st[nm]===String(v)?"checked":""} aria-label="${esc(lab)}">`;
 function grid(q){let h=`<div class=sc><table class=g><thead><tr><th>${fn(q.x||"")}</th>${q.o.map(o=>`<th>${fn(o)}</th>`).join("")}</tr></thead><tbody>`;
-q.r.forEach((r,i)=>{const nm=`q${q.n}_c${i}`;meta[nm]=[`Q${q.n} – ${clean(r)}`,q.o.map(clean)];h+=`<tr><td class=l>${fn(r)}</td>`+q.o.map((o,j)=>`<td>${rad(nm,j,clean(o))}</td>`).join("")+"</tr>"});
+q.r.forEach((r,i)=>{const nm=`q${q.n}_c${i}`;meta[nm]=[`Q${q.n} – ${clean(r)}`,q.o.map(clean),q.n,clean(r),""];h+=`<tr><td class=l>${fn(r)}</td>`+q.o.map((o,j)=>`<td>${rad(nm,j,clean(o))}</td>`).join("")+"</tr>"});
 return h+"</tbody></table></div>"}
 function fac(q){const k=q.c.length;
 let h=`<div class=leg>${fn(q.l).split(" · ").join("<br>")}</div><div class=sc><table class=f><thead><tr><th rowspan=2></th>${q.c.map(c=>`<th colspan=6>${c}</th>`).join("")}</tr><tr>${q.c.map(()=>SYM.map(s=>`<th class=s>${s}</th>`).join("")).join("")}</tr></thead><tbody>`;
 q.r.forEach((r,i)=>{if(r[0]=="#"){h+=`<tr class=gr><td colspan=${1+6*k}>${fn(r.slice(1))}</td></tr>`;return}
 let lab=r,tx="";
-if(r[0]=="?"){lab=r.slice(1);const nm=`q${q.n}_r${i}_t`;meta[nm]=[`Q${q.n} – Autre élément (à préciser)`,null];tx=`<input type=text class=tx name="${nm}" value="${esc(st[nm]||"")}" placeholder="…">`}
-h+=`<tr><td class=l>${fn(lab)}${tx}</td>`+q.c.map((c,j)=>{const nm=`q${q.n}_r${i}_c${j}`;meta[nm]=[`Q${q.n} – ${clean(lab)} – ${c}`,SYM];return SYM.map((s,v)=>`<td class="${v==5?"na":""}">${rad(nm,v,s)}</td>`).join("")}).join("")+"</tr>"});
+if(r[0]=="?"){lab=r.slice(1);const nm=`q${q.n}_r${i}_t`;meta[nm]=[`Q${q.n} – Autre élément (à préciser)`,null,q.n,"Autre élément (à préciser)","Précision"];tx=`<input type=text class=tx name="${nm}" value="${esc(st[nm]||"")}" placeholder="…">`}
+h+=`<tr><td class=l>${fn(lab)}${tx}</td>`+q.c.map((c,j)=>{const nm=`q${q.n}_r${i}_c${j}`;meta[nm]=[`Q${q.n} – ${clean(lab)} – ${c}`,SYM,q.n,clean(lab),c];return SYM.map((s,v)=>`<td class="${v==5?"na":""}">${rad(nm,v,s)}</td>`).join("")}).join("")+"</tr>"});
 return h+"</tbody></table></div>"}
-function txt(q){const nm="q"+q.n;meta[nm]=["Q"+q.n,null];return `<textarea name="${nm}" placeholder="Votre réponse…">${esc(st[nm]||"")}</textarea>`}
+function txt(q){const nm="q"+q.n;meta[nm]=["Q"+q.n,null,q.n,"Réponse libre",""];return `<textarea name="${nm}" placeholder="Votre réponse…">${esc(st[nm]||"")}</textarea>`}
 document.getElementById("qs").innerHTML=Q.map(q=>(q.h?`<h2>${q.h}</h2>`:"")+`<section class=q><h3><b>${q.n}.</b> ${fn(q.t)}</h3>${q.p?`<div class=p>${fn(q.p)}</div>`:""}${q.k=="g"?grid(q):q.k=="f"?fac(q):txt(q)}</section>`).join("");
 function prog(){const a=Object.keys(meta).filter(k=>meta[k][1]);document.getElementById("pg").textContent=`Progression : ${a.filter(k=>st[k]!==undefined).length} / ${a.length} réponses`}
 function sv(e){const t=e.target;if(!t.name)return;st[t.name]=t.value;try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}prog()}
@@ -69,23 +69,54 @@ document.getElementById("deflist").innerHTML=Object.keys(DEF).map(k=>{const t=DE
 document.addEventListener("click",e=>{const f=e.target.closest(".fn");if(!f)return;document.getElementById("defs").open=true;const t=document.getElementById("d"+f.dataset.n);if(t){t.scrollIntoView({block:"center"});t.style.background="var(--hd)"}});
 document.querySelector("[name=respondent]").value=st.respondent||"";
 
-// === Envoi par e-mail (FormSubmit) avec plan B ===
+// === Envoi par e-mail avec fichier Excel en pièce jointe (FormSubmit) + plan B ===
 const MAIL_TO="alichaabouni40@gmail.com";
 const ENDPOINT="https://formsubmit.co/ajax/"+MAIL_TO;
 function summary(){const o=["ENQUÊTE SUR LA DISTRIBUTION DES CRÉDITS BANCAIRES – RÉPONSES","Répondant : "+(st.respondent||""),"Date : "+new Date().toISOString(),""];
 for(const k in meta){const v=st[k];if(v===undefined||v==="")continue;const m=meta[k];o.push(m[0]+" : "+(m[1]?m[1][v]:v))}return o.join("\n")}
-function download(){const s=summary();
+
+// --- Génération d'un vrai fichier .xlsx (sans bibliothèque externe) ---
+const enc=new TextEncoder();
+const CRC=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=d=>{let c=0xFFFFFFFF;for(let i=0;i<d.length;i++)c=CRC[(c^d[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
+const u16=v=>[v&255,(v>>8)&255],u32=v=>[v&255,(v>>8)&255,(v>>16)&255,(v>>>24)&255];
+function zip(files){const ch=[],cd=[];let off=0,cds=0;
+for(const f of files){const nm=enc.encode(f.name),d=enc.encode(f.data),c=crc32(d);
+const lh=new Uint8Array([0x50,0x4b,3,4,20,0,0,8,0,0,0,0,0x21,0,...u32(c),...u32(d.length),...u32(d.length),...u16(nm.length),0,0]);
+ch.push(lh,nm,d);
+const ce=new Uint8Array([0x50,0x4b,1,2,20,0,20,0,0,8,0,0,0,0,0x21,0,...u32(c),...u32(d.length),...u32(d.length),...u16(nm.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(off)]);
+cd.push(ce,nm);cds+=ce.length+nm.length;off+=lh.length+nm.length+d.length}
+const end=new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(files.length),...u16(files.length),...u32(cds),...u32(off),0,0]);
+return new Blob([...ch,...cd,end],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})}
+const xe=s=>String(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const colL=i=>String.fromCharCode(65+i);
+function sheet(rows,widths){return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>'+widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")+'</cols><sheetData>'+rows.map((r,i)=>`<row r="${i+1}">`+r.map((v,j)=>`<c r="${colL(j)}${i+1}" t="inlineStr" s="${i?2:1}"><is><t xml:space="preserve">${xe(v)}</t></is></c>`).join("")+"</row>").join("")+"</sheetData></worksheet>"}
+function buildXlsx(){
+const qt={};Q.forEach(q=>qt[q.n]=clean(q.t));
+const rows=[["Banque","N° question","Question","Élément","Colonne / précision","Réponse"]];
+for(const k in meta){const v=st[k];if(v===undefined||v==="")continue;const m=meta[k];
+rows.push([st.respondent||"",m[2],qt[m[2]]||"",m[3],m[4],m[1]?m[1][v]:v])}
+const info=[["Champ","Valeur"],["Banque",st.respondent||""],["Date d’envoi",new Date().toLocaleString("fr-FR")],["Nombre de réponses",String(rows.length-1)]];
+const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',NS='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',RT="http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+return zip([
+{name:"[Content_Types].xml",data:X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'},
+{name:"_rels/.rels",data:X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${RT}/officeDocument" Target="xl/workbook.xml"/></Relationships>`},
+{name:"xl/workbook.xml",data:X+`<workbook ${NS} xmlns:r="${RT}"><sheets><sheet name="Réponses" sheetId="1" r:id="rId1"/><sheet name="Infos" sheetId="2" r:id="rId2"/></sheets></workbook>`},
+{name:"xl/_rels/workbook.xml.rels",data:X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${RT}/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="${RT}/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="${RT}/styles" Target="styles.xml"/></Relationships>`},
+{name:"xl/styles.xml",data:X+`<styleSheet ${NS}><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE6EBF8"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`},
+{name:"xl/worksheets/sheet1.xml",data:sheet(rows,[22,11,60,48,34,34])},
+{name:"xl/worksheets/sheet2.xml",data:sheet(info,[24,40])}])}
+const xlsxName=()=>"BLS_reponses_"+(st.respondent||"banque").replace(/[^\w\-]+/g,"_").slice(0,40)+".xlsx";
+
+function download(){
 try{const a=document.createElement("a");
-a.href=URL.createObjectURL(new Blob([s],{type:"text/plain;charset=utf-8"}));
-a.download="BLS_reponses.txt";document.body.appendChild(a);a.click();a.remove();return true}catch(_){return false}}
+a.href=URL.createObjectURL(buildXlsx());
+a.download=xlsxName();document.body.appendChild(a);a.click();a.remove();return true}catch(_){return false}}
 function copyText(){try{navigator.clipboard.writeText(summary())}catch(_){}}
 function fallback(){
 copyText();download();
-location.href="mailto:"+MAIL_TO+"?subject="+encodeURIComponent("BLS – Réponses de "+(st.respondent||""))+"&body="+encodeURIComponent("Bonjour,\n\nVeuillez trouver mes réponses au l’enquête sur la distribution des crédits bancaires en pièce jointe (BLS_reponses.txt). Elles sont aussi copiées dans le presse-papiers : vous pouvez les coller ici.\n\n"+(st.respondent||""));
+location.href="mailto:"+MAIL_TO+"?subject="+encodeURIComponent("BLS – Réponses de "+(st.respondent||""))+"&body="+encodeURIComponent("Bonjour,\n\nVeuillez trouver en pièce jointe mes réponses à l’enquête sur la distribution des crédits bancaires (fichier Excel "+xlsxName()+", à joindre à ce message).\n\n"+(st.respondent||""));
 }
-document.getElementById("bdl").onclick=()=>{
-if(Object.keys(meta).filter(k=>st[k]!==undefined).length===0){msg.textContent="Aucune réponse à télécharger.";return}
-download();copyText();msg.textContent="Fichier BLS_reponses.txt téléchargé (réponses aussi copiées dans le presse-papiers)."};
 const sb=document.getElementById("b6");
 sb.onclick=async()=>{
 if(!st.respondent){msg.textContent="Merci d’indiquer d’abord le nom de la banque (en haut de page).";document.querySelector("[name=respondent]").focus();return}
@@ -93,13 +124,17 @@ const tot=Object.keys(meta).filter(k=>meta[k][1]).length,ans=Object.keys(meta).f
 if(ans===0){msg.textContent="Aucune réponse à envoyer.";return}
 if(miss>0&&!sb.dataset.c){sb.dataset.c=1;sb.textContent="Envoyer quand même";msg.textContent="Il reste "+miss+" case(s) sans réponse (les lignes « à préciser » sont facultatives). Complétez-les ou cliquez à nouveau sur « Envoyer quand même ».";return}
 msg.textContent="Envoi en cours…";sb.disabled=true;
-try{const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({_subject:"BLS – Réponses de "+st.respondent,_template:"box",_captcha:"false",Répondant:st.respondent,Résumé:summary()})});
+try{const fd=new FormData();
+fd.append("_subject","BLS – Réponses de "+st.respondent);fd.append("_template","box");fd.append("_captcha","false");
+fd.append("Répondant",st.respondent);fd.append("Résumé",summary());
+fd.append("attachment",buildXlsx(),xlsxName());
+const r=await fetch(ENDPOINT,{method:"POST",headers:{"Accept":"application/json"},body:fd});
 let j={};try{j=await r.json()}catch(_){}
 const rt=String(j.message||"");
 if(!r.ok||String(j.success)==="false")throw new Error(rt||("http "+r.status));
 sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
 if(/activat/i.test(rt)){msg.textContent="Envoi accepté, mais le formulaire doit d’abord être activé : ouvrez l’e-mail de FormSubmit reçu sur "+MAIL_TO+" (vérifiez les spams), cliquez sur « Activate Form », puis renvoyez.";return}
-msg.textContent="Merci ! Vos réponses ont été envoyées à "+MAIL_TO+"."}
+msg.textContent="Merci ! Vos réponses (fichier Excel en pièce jointe) ont été envoyées à "+MAIL_TO+"."}
 catch(e){sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
-msg.textContent="L’envoi automatique a échoué ("+(e.message||"erreur réseau")+"). Un fichier BLS_reponses.txt a été téléchargé et copié : joignez-le à l’e-mail qui s’ouvre.";fallback()}};
+msg.textContent="L’envoi automatique a échoué ("+(e.message||"erreur réseau")+"). Le fichier Excel "+xlsxName()+" a été téléchargé : joignez-le à l’e-mail qui s’ouvre.";fallback()}};
 </script></body></html>
