@@ -70,7 +70,7 @@ document.addEventListener("click",e=>{const f=e.target.closest(".fn");if(!f)retu
 document.querySelector("[name=respondent]").value=st.respondent||"";
 
 // === Envoi par e-mail avec fichier Excel en pièce jointe (FormSubmit) + plan B ===
-const MAIL_TO="alichaabouni40@gmail.com";
+const MAIL_TO="ali.chaabouni@bct.gov.tn";
 const ENDPOINT="https://formsubmit.co/ajax/"+MAIL_TO;
 function summary(){const o=["ENQUÊTE SUR LA DISTRIBUTION DES CRÉDITS BANCAIRES – RÉPONSES","Répondant : "+(st.respondent||""),"Date : "+new Date().toISOString(),""];
 for(const k in meta){const v=st[k];if(v===undefined||v==="")continue;const m=meta[k];o.push(m[0]+" : "+(m[1]?m[1][v]:v))}return o.join("\n")}
