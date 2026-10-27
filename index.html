@@ -124,17 +124,18 @@ const tot=Object.keys(meta).filter(k=>meta[k][1]).length,ans=Object.keys(meta).f
 if(ans===0){msg.textContent="Aucune réponse à envoyer.";return}
 if(miss>0&&!sb.dataset.c){sb.dataset.c=1;sb.textContent="Envoyer quand même";msg.textContent="Il reste "+miss+" case(s) sans réponse (les lignes « à préciser » sont facultatives). Complétez-les ou cliquez à nouveau sur « Envoyer quand même ».";return}
 msg.textContent="Envoi en cours…";sb.disabled=true;
-try{const fd=new FormData();
-fd.append("_subject","BLS – Réponses de "+st.respondent);fd.append("_template","box");fd.append("_captcha","false");
-fd.append("Répondant",st.respondent);fd.append("Résumé",summary());
-fd.append("attachment",buildXlsx(),xlsxName());
-const r=await fetch(ENDPOINT,{method:"POST",headers:{"Accept":"application/json"},body:fd});
-let j={};try{j=await r.json()}catch(_){}
-const rt=String(j.message||"");
-if(!r.ok||String(j.success)==="false")throw new Error(rt||("http "+r.status));
+try{
+let fr=document.getElementById("sendfr");if(!fr){fr=document.createElement("iframe");fr.name="sendfr";fr.id="sendfr";fr.style.display="none";document.body.appendChild(fr)}
+const f=document.createElement("form");f.method="POST";f.action="https://formsubmit.co/"+MAIL_TO;f.enctype="multipart/form-data";f.target="sendfr";f.style.display="none";
+const add=(n,v)=>{const x=document.createElement("input");x.type="hidden";x.name=n;x.value=v;f.appendChild(x)};
+add("_subject","BLS – Réponses de "+st.respondent);add("_template","box");add("_captcha","false");add("Répondant",st.respondent);add("Résumé",summary());
+const fi=document.createElement("input");fi.type="file";fi.name="attachment";
+const dt=new DataTransfer();dt.items.add(new File([buildXlsx()],xlsxName(),{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));fi.files=dt.files;f.appendChild(fi);
+document.body.appendChild(f);
+await new Promise(res=>{fr.onload=res;f.submit();setTimeout(res,8000)});
+f.remove();
 sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
-if(/activat/i.test(rt)){msg.textContent="Envoi accepté, mais le formulaire doit d’abord être activé : ouvrez l’e-mail de FormSubmit reçu sur "+MAIL_TO+" (vérifiez les spams), cliquez sur « Activate Form », puis renvoyez.";return}
-msg.textContent="Merci ! Vos réponses (fichier Excel en pièce jointe) ont été envoyées à "+MAIL_TO+"."}
+msg.textContent="Réponses envoyées à "+MAIL_TO+" avec le fichier Excel en pièce jointe. Si rien n’arrive, vérifiez les spams ou activez le formulaire via l’e-mail FormSubmit reçu, puis renvoyez."}
 catch(e){sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
 msg.textContent="L’envoi automatique a échoué ("+(e.message||"erreur réseau")+"). Le fichier Excel "+xlsxName()+" a été téléchargé : joignez-le à l’e-mail qui s’ouvre.";fallback()}};
 </script></body></html>
