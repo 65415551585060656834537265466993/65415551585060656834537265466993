@@ -48,14 +48,15 @@ sup.fn{cursor:pointer;color:var(--ac);font-weight:600}
 .req{color:#e11d2e;font-weight:700}
 .lab{display:block;margin-top:10px;font-weight:600}
 button:disabled{opacity:.45;cursor:not-allowed}
-.hint{flex:1 1 260px}
+.hint{flex:1 1 260px;font-size:1.05rem;font-weight:600;line-height:1.4;color:var(--mut)}
 tr.oth:not(.has) td.oc input{visibility:hidden}
+tr.oth.has td.l::before{content:"* ";color:#e11d2e;font-weight:700}
 </style></head><body><main>
 <header class="top"><h1>Enquête sur la distribution des crédits bancaires</h1>
 <div class="sub">Une seule case à cocher par ligne (tableaux simples) ou par ligne et par colonne (tableaux de facteurs). Les numéros entre crochets renvoient aux définitions en bas de page. Les questions marquées d’un <span class="req">*</span> sont obligatoires.</div>
 <label class="lab" for="resp">Nom de la banque <span class="req">*</span></label>
 <input type="text" id="resp" class="tx" name="respondent" placeholder="Nom de la banque" style="max-width:420px;margin-top:10px">
-<div class="pgw" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pgt"><span>Progression</span><span id="pgv">0 / 0 réponses · 0 %</span></div><div class="pgb"><div id="pgf"></div></div></div></header>
+<div class="pgw" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pgt"><span>Progression</span><span id="pgv">0 %</span></div><div class="pgb"><div id="pgf"></div></div></div></header>
 <div id="qs"></div>
 <details class="q" id="defs"><summary><b>Définitions et indications</b></summary><div id="deflist"></div></details>
 <div class="bar"><button id="b6" disabled>Finaliser et envoyer</button><span class="sub hint" id="hint"></span><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
@@ -80,15 +81,19 @@ if(r[0]=="?"){lab=r.slice(1);const nm=`q${q.n}_r${i}_t`;meta[nm]=[`Q${q.n} – A
 h+=`<tr class="${tx?"oth":""}"><td class=l>${fn(lab)}${tx}</td>`+q.c.map((c,j)=>{const nm=`q${q.n}_r${i}_c${j}`;meta[nm]=[`Q${q.n} – ${clean(lab)} – ${c}`,SYM,q.n,clean(lab),c];if(tx)opt.add(nm);return SYM.map((s,v)=>`<td class="${v==5?"na":""}${tx?" oc":""}">${rad(nm,v,s)}</td>`).join("")}).join("")+"</tr>"});
 return h+"</tbody></table></div>"}
 function txt(q){const nm="q"+q.n;meta[nm]=["Q"+q.n,null,q.n,"Réponse libre",""];return `<textarea name="${nm}" placeholder="Votre réponse…">${esc(st[nm]||"")}</textarea>`}
-document.getElementById("qs").innerHTML=Q.map(q=>(q.h?`<h2>${q.h}</h2>`:"")+`<section class=q><h3><b>${q.n}.</b> ${fn(q.t)}${q.k=="t"?"":' <span class="req" title="Question obligatoire">*</span>'}</h3>${q.p?`<div class=p>${fn(q.p)}</div>`:""}${q.k=="g"?grid(q):q.k=="f"?fac(q):txt(q)}</section>`).join("");
-function stat(){const a=Object.keys(meta).filter(k=>meta[k][1]&&!opt.has(k));return{tot:a.length,ans:a.filter(k=>st[k]!==undefined).length}}
+document.getElementById("qs").innerHTML=Q.map(q=>(q.h?`<h2>${q.h}</h2>`:"")+`<section class=q><h3><b>${q.n}.</b> ${fn(q.t)} <span class="req" title="Question obligatoire">*</span></h3>${q.p?`<div class=p>${fn(q.p)}</div>`:""}${q.k=="g"?grid(q):q.k=="f"?fac(q):txt(q)}</section>`).join("");
+function stat(){const a=Object.keys(meta).filter(k=>meta[k][1]&&(!opt.has(k)||(st[k.replace(/_c\d+$/,"_t")]||"").trim()!=="")),t=Object.keys(meta).filter(k=>!meta[k][1]&&/^q\d+$/.test(k));return{tot:a.length+t.length,ans:a.filter(k=>st[k]!==undefined).length+t.filter(k=>(st[k]||"").trim()!=="").length}}
 function prog(){const s=stat(),p=s.tot?Math.round(100*s.ans/s.tot):0,ok=s.ans===s.tot&&!!st.respondent;
-document.getElementById("pgf").style.width=p+"%";document.getElementById("pgv").textContent=`${s.ans} / ${s.tot} réponses obligatoires · ${p} %`;document.querySelector(".pgw").setAttribute("aria-valuenow",p);
+document.getElementById("pgf").style.width=p+"%";document.getElementById("pgv").textContent=`${p} %`;document.querySelector(".pgw").setAttribute("aria-valuenow",p);
 const b=document.getElementById("b6");if(b&&!window.busy)b.disabled=!ok;
-const hn=document.getElementById("hint");if(hn)hn.textContent=ok?"":"Le bouton sera activé lorsque le nom de la banque et toutes les questions obligatoires (*) seront remplis. Réponses obligatoires restantes : "+(s.tot-s.ans)+"."}
+const hn=document.getElementById("hint");if(hn)hn.textContent=ok?"":"Le bouton sera activé lorsque le nom de la banque et toutes les questions obligatoires (*) seront remplis."}
 function syncOth(clear){document.querySelectorAll("tr.oth").forEach(tr=>{const t=tr.querySelector("input[type=text]"),has=t.value.trim()!=="";tr.classList.toggle("has",has);if(!has&&clear)tr.querySelectorAll("input[type=radio]").forEach(r=>{r.checked=false;delete st[r.name]})})}
-function sv(e){const t=e.target;if(!t.name)return;st[t.name]=t.value;if(t.type==="text")syncOth(true);try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}prog()}
-document.addEventListener("change",sv);document.addEventListener("input",sv);syncOth(false);prog();
+function sv(e){const t=e.target;if(!t.name)return;if(t.type==="radio"&&!t.checked)delete st[t.name];else st[t.name]=t.value;if(t.type==="text")syncOth(true);try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}prog()}
+document.addEventListener("change",sv);document.addEventListener("input",sv);
+const rec=e=>{const r=e.target;if(r&&r.type==="radio")r.dataset.was=r.checked?"1":""};
+document.addEventListener("pointerdown",rec,true);document.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Spacebar")rec(e)},true);
+document.addEventListener("click",e=>{const r=e.target;if(!r||r.type!=="radio")return;if(r.dataset.was==="1"){r.checked=false;r.dataset.was="";delete st[r.name];try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}prog()}},true);
+syncOth(false);prog();
 const msg=document.getElementById("msg");
 document.getElementById("deflist").innerHTML=Object.keys(DEF).map(k=>{const t=DEF[k],i=t.indexOf(":"),hd=i>0&&i<90;return `<p id="d${k}"><b>[${k}] ${hd?esc(t.slice(0,i)):""}</b>${hd?" :"+esc(t.slice(i+1)):" "+esc(t)}</p>`}).join("");
 document.addEventListener("click",e=>{const f=e.target.closest(".fn");if(!f)return;document.getElementById("defs").open=true;const t=document.getElementById("d"+f.dataset.n);if(t){t.scrollIntoView({block:"center"});t.style.background="var(--hd)"}});
