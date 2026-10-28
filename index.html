@@ -121,7 +121,7 @@ function resetAll(){st={};try{localStorage.removeItem("blsq")}catch(_){}
 document.querySelectorAll("input[type=radio]").forEach(i=>{i.checked=false});
 document.querySelectorAll("input[type=text],textarea").forEach(i=>{i.value=""});
 prog();window.scrollTo({top:0,behavior:"smooth"})}
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbz3rFOCA6LptE7imB-lFn7QI3E8GeSrUmJorCPpcVFc0P7C7suY6bwcbhMdVE0bQcFjJw/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxLuTYS2hLVq5KPCgZjW-RiBlm5NzmuawrUYVJqTdMXrx5iRFwybp3OjVzYgJZndcnX7Q/exec";
 const sb=document.getElementById("b6");
 const toB64=blob=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=()=>rej(new Error("lecture"));r.readAsDataURL(blob)});
 sb.onclick=async()=>{
