@@ -128,9 +128,7 @@ msg.textContent="Envoi en cours…";sb.disabled=true;
 try{
 if(SCRIPT_URL.indexOf("COLLER_ICI")===0)throw new Error("configuration");
 const payload=JSON.stringify({respondent:st.respondent,filename:xlsxName(),summary:summary(),xlsx:await toB64(buildXlsx())});
-const r=await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:payload});
-const j=await r.json();
-if(!j.ok)throw new Error(j.error||"serveur");
+await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:payload});
 sb.textContent="Envoyé ✔";sb.disabled=true;delete sb.dataset.c;
 msg.textContent="Merci, vos réponses ont bien été envoyées."}
 catch(e){sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
