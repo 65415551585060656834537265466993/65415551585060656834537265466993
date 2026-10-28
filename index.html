@@ -70,7 +70,7 @@ document.addEventListener("click",e=>{const f=e.target.closest(".fn");if(!f)retu
 document.querySelector("[name=respondent]").value=st.respondent||"";
 
 // === Génération du fichier Excel + téléchargement + e-mail pré-rempli ===
-const MAIL_TO="alichaabouni40@gmail.com";
+const MAIL_TO="zitoun.mariem@gmail.com";
 function summary(){const o=["ENQUÊTE SUR LA DISTRIBUTION DES CRÉDITS BANCAIRES – RÉPONSES","Répondant : "+(st.respondent||""),"Date : "+new Date().toISOString(),""];
 for(const k in meta){const v=st[k];if(v===undefined||v==="")continue;const m=meta[k];o.push(m[0]+" : "+(m[1]?m[1][v]:v))}return o.join("\n")}
 
@@ -116,6 +116,11 @@ function fallback(){
 copyText();download();
 location.href="mailto:"+MAIL_TO+"?subject="+encodeURIComponent("BLS – Réponses de "+(st.respondent||""))+"&body="+encodeURIComponent("Bonjour,\n\nVeuillez trouver en pièce jointe mes réponses à l’enquête sur la distribution des crédits bancaires (fichier Excel "+xlsxName()+", à joindre à ce message).\n\n"+(st.respondent||""));
 }
+const RESET_AFTER_SEND=true; // true = après l'envoi, le questionnaire est remis à zéro (réponses effacées)
+function resetAll(){st={};try{localStorage.removeItem("blsq")}catch(_){}
+document.querySelectorAll("input[type=radio]").forEach(i=>{i.checked=false});
+document.querySelectorAll("input[type=text],textarea").forEach(i=>{i.value=""});
+prog();window.scrollTo({top:0,behavior:"smooth"})}
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbz3rFOCA6LptE7imB-lFn7QI3E8GeSrUmJorCPpcVFc0P7C7suY6bwcbhMdVE0bQcFjJw/exec";
 const sb=document.getElementById("b6");
 const toB64=blob=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=()=>rej(new Error("lecture"));r.readAsDataURL(blob)});
@@ -130,7 +135,8 @@ if(SCRIPT_URL.indexOf("COLLER_ICI")===0)throw new Error("configuration");
 const payload=JSON.stringify({respondent:st.respondent,filename:xlsxName(),summary:summary(),xlsx:await toB64(buildXlsx())});
 await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:payload});
 sb.textContent="Envoyé ✔";sb.disabled=true;delete sb.dataset.c;
-msg.textContent="Merci, vos réponses ont bien été envoyées."}
+msg.textContent="Merci, vos réponses ont bien été envoyées.";
+if(RESET_AFTER_SEND){resetAll();setTimeout(()=>{sb.disabled=false;sb.textContent="Finaliser et envoyer"},4000)}}
 catch(e){sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
 msg.textContent="L’envoi a échoué ("+(e.message||"erreur réseau")+"). Vos réponses sont conservées sur cette page : vérifiez votre connexion et cliquez à nouveau sur le bouton."}};
 </script></body></html>
