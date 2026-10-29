@@ -53,10 +53,10 @@ tr.oth:not(.has) td.oc input{visibility:hidden}
 tr.oth.has td.l::before{content:"* ";color:#e11d2e;font-weight:700}
 </style></head><body><main>
 <header class="top"><h1>Enquête sur la distribution des crédits bancaires</h1>
-<div class="sub">Une seule case à cocher par ligne (tableaux simples) ou par ligne et par colonne (tableaux de facteurs). Les numéros entre crochets renvoient aux définitions en bas de page. Les questions marquées d’un <span class="req">*</span> sont obligatoires.</div>
-<label class="lab" for="resp">Nom de la banque <span class="req">*</span></label>
-<input type="text" id="resp" class="tx" name="respondent" placeholder="Nom de la banque" style="max-width:420px;margin-top:10px">
 <div class="pgw" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pgt"><span>Progression</span><span id="pgv">0 %</span></div><div class="pgb"><div id="pgf"></div></div></div></header>
+<div id="intro"><div class="sub">Une seule case à cocher par ligne (tableaux simples) ou par ligne et par colonne (tableaux de facteurs). Les numéros entre crochets renvoient aux définitions en bas de page. Les questions marquées d’un <span class="req">*</span> sont obligatoires.</div>
+<label class="lab" for="resp">Nom de la banque <span class="req">*</span></label>
+<input type="text" id="resp" class="tx" name="respondent" placeholder="Nom de la banque" style="max-width:420px;margin-top:10px"></div>
 <div id="qs"></div>
 <details class="q" id="defs"><summary><b>Définitions et indications</b></summary><div id="deflist"></div></details>
 <div class="bar"><button id="b6" disabled>Finaliser et envoyer</button><span class="sub hint" id="hint"></span><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
@@ -166,7 +166,7 @@ await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"te
 sb.textContent="Envoyé ✔";sb.disabled=true;delete sb.dataset.c;
 msg.textContent="";
 if(RESET_AFTER_SEND)resetAll();
-document.querySelectorAll("header.top,#qs,#defs,.bar").forEach(e=>{e.hidden=true});
+document.querySelectorAll("header.top,#intro,#qs,#defs,.bar").forEach(e=>{e.hidden=true});
 document.getElementById("thanks").hidden=false;window.scrollTo({top:0})}
 catch(e){window.busy=false;sb.disabled=false;sb.textContent="Finaliser et envoyer";delete sb.dataset.c;
 msg.textContent="L’envoi a échoué ("+(e.message||"erreur réseau")+"). Vos réponses sont conservées sur cette page : vérifiez votre connexion et cliquez à nouveau sur le bouton."}};
