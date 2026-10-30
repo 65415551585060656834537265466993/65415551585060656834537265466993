@@ -3,9 +3,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Enquête sur la distribution des crédits bancaires – Questionnaire à cocher</title>
 <style>
-:root{--bg:#fff;--fg:#1a1d29;--mut:#5d6579;--card:#f4f6fb;--bd:#d5dae6;--ac:#003299;--hd:#e6ebf8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161d;--fg:#e8eaf0;--mut:#9aa1b3;--card:#1c1f2a;--bd:#343949;--ac:#8aa8ff;--hd:#262c40;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#14161d;--fg:#e8eaf0;--mut:#9aa1b3;--card:#1c1f2a;--bd:#343949;--ac:#8aa8ff;--hd:#262c40;color-scheme:dark}
+:root{--bg:#fff;--fg:#1a1d29;--mut:#5d6579;--card:#f4f6fb;--bd:#d5dae6;--ac:#003299;--hd:#e6ebf8;--sep:#a3acc4;--er:#b00020;--erbg:#fdecea;--grid:#4a5168;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161d;--fg:#e8eaf0;--mut:#9aa1b3;--card:#1c1f2a;--bd:#343949;--ac:#8aa8ff;--hd:#262c40;--sep:#5b6485;--er:#ffb4ab;--erbg:#3b1f22;--grid:#97a1bd;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14161d;--fg:#e8eaf0;--mut:#9aa1b3;--card:#1c1f2a;--bd:#343949;--ac:#8aa8ff;--hd:#262c40;--sep:#5b6485;--er:#ffb4ab;--erbg:#3b1f22;--grid:#97a1bd;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg)}
 main{max-width:1200px;margin:auto;padding:16px}
@@ -22,6 +22,15 @@ td.l{text-align:left}
 th.s{font-size:.72rem;padding:4px 0}
 tr.gr td{background:var(--hd);text-align:left;font-weight:600}
 td.na,th.s:nth-child(6n){border-right:2px solid var(--bd)}
+/* matrices à plusieurs groupes : séparations de colonnes plus épaisses */
+.sc table.m td.na,.sc table.m th.s:nth-child(6n),.sc table.m>thead>tr:first-child>th[colspan]{border-right:4px solid var(--sep)}
+.sec{scroll-margin-top:130px}.q{scroll-margin-top:130px}.q.hl{outline:3px solid var(--er);outline-offset:4px;border-radius:8px}
+.err{flex:1 1 100%;font-size:1.15rem;font-weight:600;line-height:1.7;padding:12px 16px;margin-top:8px;border:1px solid var(--er);border-left:6px solid var(--er);border-radius:8px;color:var(--er);background:var(--erbg)}
+.err a{color:inherit;text-decoration:underline;font-weight:800;padding:0 3px}
+h2{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.chv{display:inline-block;transition:transform .2s}.sec.cl .chv{transform:rotate(-90deg)}
+.lk{display:none;margin-left:auto;font-size:.8rem;font-weight:400}
+.sec.lock h2{opacity:.55;cursor:not-allowed}.sec.lock .lk{display:inline}
 .sc table{table-layout:fixed}.sc table.f>thead>tr:first-child>th:first-child,.sc table.g>thead>tr:first-child>th:first-child{width:28%}
 @media(max-width:820px){.sc table{min-width:760px}}
 input[type=radio]{accent-color:var(--ac);width:17px;height:17px;cursor:pointer}
@@ -54,12 +63,12 @@ tr.oth.has td.l::before{content:"* ";color:#e11d2e;font-weight:700}
 </style></head><body><main>
 <header class="top"><h1>Enquête sur la distribution des crédits bancaires</h1>
 <div class="pgw" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pgt"><span>Progression</span><span id="pgv">0 %</span></div><div class="pgb"><div id="pgf"></div></div></div></header>
-<div id="intro"><div class="sub">Une seule case à cocher par ligne (tableaux simples) ou par ligne et par colonne (tableaux de facteurs). Les numéros entre crochets renvoient aux définitions en bas de page. Les questions marquées d’un <span class="req">*</span> sont obligatoires.</div>
+<div id="intro"><div class="sub">Une seule case à cocher par ligne (tableaux simples) ou par ligne et par colonne (tableaux de facteurs). Les numéros entre crochets renvoient aux définitions en bas de page. Les questions marquées d’un <span class="req">*</span> sont obligatoires. Cliquez sur l’intitulé d’une section pour afficher ou masquer ses questions ; une section terminée se replie automatiquement et la suivante s’ouvre ; un simple clic sur l’intitulé la rouvre.</div>
 <label class="lab" for="resp">Nom de la banque <span class="req">*</span></label>
 <input type="text" id="resp" class="tx" name="respondent" placeholder="Nom de la banque" style="max-width:420px;margin-top:10px"></div>
 <div id="qs"></div>
 <details class="q" id="defs"><summary><b>Définitions et indications</b></summary><div id="deflist"></div></details>
-<div class="bar"><button id="b6" disabled>Finaliser et envoyer</button><span class="sub hint" id="hint"></span><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
+<div class="bar"><button id="b5" class="sec">Consulter mes réponses (PDF)</button><button id="b6">Finaliser et envoyer</button><span class="sub hint" id="hint"></span><div class="err" id="err" role="alert" hidden></div><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
 <div id="thanks" class="thx" hidden role="status"><div class="ck">✔</div><h2>Merci pour votre participation !</h2><p>Vos réponses ont bien été envoyées.</p></div>
 </main>
 <script>
@@ -74,26 +83,54 @@ function grid(q){let h=`<div class=sc><table class=g><thead><tr><th>${fn(q.x||""
 q.r.forEach((r,i)=>{const nm=`q${q.n}_c${i}`;meta[nm]=[`Q${q.n} – ${clean(r)}`,q.o.map(clean),q.n,clean(r),""];h+=`<tr><td class=l>${fn(r)}</td>`+q.o.map((o,j)=>`<td>${rad(nm,j,clean(o))}</td>`).join("")+"</tr>"});
 return h+"</tbody></table></div>"}
 function fac(q){const k=q.c.length;
-let h=`<div class=leg>${fn(q.l).split(" · ").join("<br>")}</div><div class=sc><table class=f><thead><tr><th rowspan=2></th>${q.c.map(c=>`<th colspan=6>${c}</th>`).join("")}</tr><tr>${q.c.map(()=>SYM.map(s=>`<th class=s>${s}</th>`).join("")).join("")}</tr></thead><tbody>`;
+let h=`<div class=leg>${fn(q.l).split(" · ").join("<br>")}</div><div class=sc><table class="f${k>1?' m':''}"><thead><tr><th rowspan=2></th>${q.c.map(c=>`<th colspan=6>${c}</th>`).join("")}</tr><tr>${q.c.map(()=>SYM.map(s=>`<th class=s>${s}</th>`).join("")).join("")}</tr></thead><tbody>`;
 q.r.forEach((r,i)=>{if(r[0]=="#"){h+=`<tr class=gr><td colspan=${1+6*k}>${fn(r.slice(1))}</td></tr>`;return}
 let lab=r,tx="";
 if(r[0]=="?"){lab=r.slice(1);const nm=`q${q.n}_r${i}_t`;meta[nm]=[`Q${q.n} – Autre élément (à préciser)`,null,q.n,"Autre élément (à préciser)","Précision"];tx=`<input type=text class=tx name="${nm}" value="${esc(st[nm]||"")}" placeholder="…">`}
 h+=`<tr class="${tx?"oth":""}"><td class=l>${fn(lab)}${tx}</td>`+q.c.map((c,j)=>{const nm=`q${q.n}_r${i}_c${j}`;meta[nm]=[`Q${q.n} – ${clean(lab)} – ${c}`,SYM,q.n,clean(lab),c];if(tx)opt.add(nm);return SYM.map((s,v)=>`<td class="${v==5?"na":""}${tx?" oc":""}">${rad(nm,v,s)}</td>`).join("")}).join("")+"</tr>"});
 return h+"</tbody></table></div>"}
 function txt(q){const nm="q"+q.n;meta[nm]=["Q"+q.n,null,q.n,"Réponse libre",""];return `<textarea name="${nm}" placeholder="Votre réponse…">${esc(st[nm]||"")}</textarea>`}
-document.getElementById("qs").innerHTML=Q.map(q=>(q.h?`<h2>${q.h}</h2>`:"")+`<section class=q><h3><b>${q.n}.</b> ${fn(q.t)} <span class="req" title="Question obligatoire">*</span></h3>${q.p?`<div class=p>${fn(q.p)}</div>`:""}${q.k=="g"?grid(q):q.k=="f"?fac(q):txt(q)}</section>`).join("");
+const secs=[];Q.forEach(q=>{if(q.h||!secs.length)secs.push([]);secs[secs.length-1].push(q)});
+const secOf={};secs.forEach((a,i)=>a.forEach(q=>secOf[q.n]=i));
+document.getElementById("qs").innerHTML=secs.map((a,i)=>`<div class=sec data-i="${i}"><h2 role=button tabindex=0 aria-expanded="false"><span class=chv>▾</span><span>${a[0].h||""}</span><span class=lk>Complétez la section précédente pour l’ouvrir</span></h2><div class=sb>`+a.map(q=>`<section class=q id="qq${q.n}"><h3><b>${q.n}.</b> ${fn(q.t)} <span class="req" title="Question obligatoire">*</span></h3>${q.p?`<div class=p>${fn(q.p)}</div>`:""}${q.k=="g"?grid(q):q.k=="f"?fac(q):txt(q)}</section>`).join("")+`</div></div>`).join("");
+let rev=0,first=true,errOn=false;
+function missing(){const set=new Set();for(const k of Object.keys(meta)){const m=meta[k];if(m[1]){if((!opt.has(k)||(st[k.replace(/_c\d+$/,"_t")]||"").trim()!=="")&&st[k]===undefined)set.add(+m[2])}else if(/^q\d+$/.test(k)&&(st[k]||"").trim()==="")set.add(+m[2])}return[...set].sort((a,b)=>a-b)}
+function showErr(){const e=document.getElementById("err"),mq=missing(),nb=!st.respondent;
+if(!mq.length&&!nb){e.hidden=true;e.innerHTML="";errOn=false;return false}
+errOn=true;let h="";
+if(nb)h+=`<div>Le nom de la banque n’est pas renseigné. <a href="#" data-bank="1">Aller au champ</a></div>`;
+if(mq.length)h+=`<div>${mq.length>1?"Questions obligatoires sans réponse":"Question obligatoire sans réponse"} : `+mq.map(n=>`<a href="#qq${n}" data-q="${n}">${n}</a>`).join(", ")+`</div>`;
+e.innerHTML=h;e.hidden=false;return true}
+function goQ(n){const i=secOf[n];if(i===undefined)return;if(i>rev)rev=i;opn[i]=true;paint();const el=document.getElementById("qq"+n);if(!el)return;
+el.scrollIntoView({block:"start",behavior:"smooth"});el.classList.add("hl");setTimeout(()=>el.classList.remove("hl"),2500)}
+document.getElementById("err").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;e.preventDefault();
+if(a.dataset.bank){const i=document.querySelector("[name=respondent]");i.scrollIntoView({block:"center",behavior:"smooth"});i.focus();return}
+goQ(+a.dataset.q)});
+function secDone(i){const inS=k=>secOf[meta[k][2]]===i,ks=Object.keys(meta),
+a=ks.filter(k=>inS(k)&&meta[k][1]&&(!opt.has(k)||(st[k.replace(/_c\d+$/,"_t")]||"").trim()!=="")),
+t=ks.filter(k=>inS(k)&&!meta[k][1]&&/^q\d+$/.test(k));
+return a.every(k=>st[k]!==undefined)&&t.every(k=>(st[k]||"").trim()!=="")}
+const opn=secs.map(()=>false);
+function paint(){document.querySelectorAll("#qs>.sec").forEach((e,i)=>{const lock=i>rev,open=!lock&&opn[i];e.classList.toggle("lock",lock);e.classList.toggle("cl",!open);
+e.querySelector(".sb").hidden=!open;const h=e.querySelector("h2");h.setAttribute("aria-expanded",open?"true":"false");h.title=lock?"Complétez d’abord la section précédente":""})}
+function reveal(){const o=rev;let n=rev;while(n<secs.length-1&&secDone(n))n++;const up=n>rev;rev=n;
+if(first)opn[rev]=true;else if(up){for(let i=o;i<n;i++)opn[i]=false;opn[rev]=true}
+paint();
+if(up&&!first){const h=document.querySelector(`#qs>.sec[data-i="${rev}"]`);if(h)setTimeout(()=>h.scrollIntoView({behavior:"smooth",block:"start"}),60)}}
+function tgl(h){const e=h.closest(".sec"),i=+e.dataset.i;if(i>rev)return;opn[i]=!opn[i];paint()}
+document.getElementById("qs").addEventListener("click",e=>{const h=e.target.closest("h2");if(h)tgl(h)});
+document.getElementById("qs").addEventListener("keydown",e=>{const h=e.target.closest&&e.target.closest("h2");if(h&&(e.key==="Enter"||e.key===" ")){e.preventDefault();tgl(h)}});
 function stat(){const a=Object.keys(meta).filter(k=>meta[k][1]&&(!opt.has(k)||(st[k.replace(/_c\d+$/,"_t")]||"").trim()!=="")),t=Object.keys(meta).filter(k=>!meta[k][1]&&/^q\d+$/.test(k));return{tot:a.length+t.length,ans:a.filter(k=>st[k]!==undefined).length+t.filter(k=>(st[k]||"").trim()!=="").length}}
 function prog(){const s=stat(),p=s.tot?Math.round(100*s.ans/s.tot):0,ok=s.ans===s.tot&&!!st.respondent;
 document.getElementById("pgf").style.width=p+"%";document.getElementById("pgv").textContent=`${p} %`;document.querySelector(".pgw").setAttribute("aria-valuenow",p);
-const b=document.getElementById("b6");if(b&&!window.busy)b.disabled=!ok;
-const hn=document.getElementById("hint");if(hn)hn.textContent=ok?"":"Le bouton sera activé lorsque le nom de la banque et toutes les questions obligatoires (*) seront remplis."}
+const hn=document.getElementById("hint");if(hn)hn.textContent=ok?"":"Pour finaliser, le nom de la banque et toutes les questions obligatoires (*) doivent être renseignés.";if(errOn)showErr();reveal()}
 function syncOth(clear){document.querySelectorAll("tr.oth").forEach(tr=>{const t=tr.querySelector("input[type=text]"),has=t.value.trim()!=="";tr.classList.toggle("has",has);if(!has&&clear)tr.querySelectorAll("input[type=radio]").forEach(r=>{r.checked=false;delete st[r.name]})})}
 function sv(e){const t=e.target;if(!t.name)return;if(t.type==="radio"&&!t.checked)delete st[t.name];else st[t.name]=t.value;if(t.type==="text")syncOth(true);try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}prog()}
 document.addEventListener("change",sv);document.addEventListener("input",sv);
 const rec=e=>{const r=e.target;if(r&&r.type==="radio")r.dataset.was=r.checked?"1":""};
 document.addEventListener("pointerdown",rec,true);document.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Spacebar")rec(e)},true);
 document.addEventListener("click",e=>{const r=e.target;if(!r||r.type!=="radio")return;if(r.dataset.was==="1"){r.checked=false;r.dataset.was="";delete st[r.name];try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}prog()}},true);
-syncOth(false);prog();
+syncOth(false);prog();first=false;
 const msg=document.getElementById("msg");
 document.getElementById("deflist").innerHTML=Object.keys(DEF).map(k=>{const t=DEF[k],i=t.indexOf(":"),hd=i>0&&i<90;return `<p id="d${k}"><b>[${k}] ${hd?esc(t.slice(0,i)):""}</b>${hd?" :"+esc(t.slice(i+1)):" "+esc(t)}</p>`}).join("");
 document.addEventListener("click",e=>{const f=e.target.closest(".fn");if(!f)return;document.getElementById("defs").open=true;const t=document.getElementById("d"+f.dataset.n);if(t){t.scrollIntoView({block:"center"});t.style.background="var(--hd)"}});
@@ -149,15 +186,85 @@ location.href="mailto:"+MAIL_TO+"?subject="+encodeURIComponent("BLS – Réponse
 const RESET_AFTER_SEND=true; // true = après l'envoi, le questionnaire est remis à zéro (réponses effacées)
 function resetAll(){st={};try{localStorage.removeItem("blsq")}catch(_){}
 document.querySelectorAll("input[type=radio]").forEach(i=>{i.checked=false});
-document.querySelectorAll("input[type=text],textarea").forEach(i=>{i.value=""});syncOth(false);
-prog()}
+document.querySelectorAll("input[type=text],textarea").forEach(i=>{i.value=""});syncOth(false);rev=0;opn.fill(false);first=true;
+prog();first=false}
+
+// === Consultation des réponses : PDF généré sans bibliothèque ===
+const HW=[278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584];
+const WA={0x2019:0x92,0x2018:0x91,0x201C:0x93,0x201D:0x94,0x2013:0x96,0x2014:0x97,0x2026:0x85,0x153:0x9C,0x20AC:0x80,0x2022:0x95,0x25CB:0x6F,0xA0:0x20,0x202F:0x20,0x2009:0x20};
+const enc1=t=>{let o="";for(const ch of String(t)){let c=ch.codePointAt(0);c=WA[c]||c;o+=c<256?String.fromCharCode(c):"?"}return o};
+const pesc=t=>"("+enc1(t).replace(/[\\()]/g,"\\$&")+")";
+const HB=[278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584],XW={0x91:278,0x92:278,0x93:500,0x94:500,0x96:556,0x97:1000,0xB7:278,0xB0:400,0xAB:556,0xBB:556,0x85:1000};
+const tw=(t,sz,b)=>{let w=0;const T=b?HB:HW;for(const ch of enc1(t)){const c=ch.charCodeAt(0);w+=c>=32&&c<=126?T[c-32]:(XW[c]||(c>=192&&c<=223?(b?722:667):(b?580:556)))}return w*sz/1000};
+function wrapT(t,w,sz,b){const out=[];for(const para of String(t).split("\n")){let cur="";for(const word of para.split(/\s+/).filter(Boolean)){const tr=cur?cur+" "+word:word;if(!cur||tw(tr,sz,b)<=w)cur=tr;else{out.push(cur);cur=word}}out.push(cur)}return out}
+function pdfBytes(){
+const PW=842,PH=595,MX=30,MT=36,MB=38,CW=PW-2*MX,pages=[],BL="0 0.2 0.6 rg",GR="0.36 0.4 0.48 rg",HF="0.89 0.92 0.97 rg",LN="0.78 0.80 0.86 RG";
+let ops,y;const np=()=>{ops=[];pages.push(ops);y=PH-MT};np();
+const f2=n=>(+n).toFixed(2);
+const txt=(x,yy,t,sz,b,col)=>ops.push(`${col||"0 g"} BT /F${b?2:1} ${sz} Tf 1 0 0 1 ${f2(x)} ${f2(yy)} Tm ${pesc(t)} Tj ET`);
+function runs(x,yy,line,sz,b,col){let cx=x;line.split(/(\[\d+\]|(?:^| )\*$)/).filter(Boolean).forEach(tk=>{const c=/^\[\d+\]$/.test(tk)?"0.10 0.40 0.80 rg":(/^ ?\*$/.test(tk)?"0.80 0.10 0.10 rg":col);txt(cx,yy,tk,sz,b,c);cx+=tw(tk,sz,b)})}
+const rect=(x,top,w,h,col)=>ops.push(`${col} ${f2(x)} ${f2(top-h)} ${f2(w)} ${f2(h)} re f`);
+const hln=(x1,x2,yy,lw)=>ops.push(`${LN} ${lw||0.6} w ${f2(x1)} ${f2(yy)} m ${f2(x2)} ${f2(yy)} l S`);
+const vln=(x,y1,y2)=>ops.push(`${LN} 0.9 w ${f2(x)} ${f2(y1)} m ${f2(x)} ${f2(y2)} l S`);
+const box=(x,top,w,h,rg)=>ops.push(`${rg||"0 0.2 0.6 RG"} 0.9 w ${f2(x)} ${f2(top-h)} ${f2(w)} ${f2(h)} re S`);
+const circ=(cx,cy,r,op)=>{const k=r*0.5523,P=(a,b)=>f2(a)+" "+f2(b);ops.push(`${P(cx+r,cy)} m ${P(cx+r,cy+k)} ${P(cx+k,cy+r)} ${P(cx,cy+r)} c ${P(cx-k,cy+r)} ${P(cx-r,cy+k)} ${P(cx-r,cy)} c ${P(cx-r,cy-k)} ${P(cx-k,cy-r)} ${P(cx,cy-r)} c ${P(cx+k,cy-r)} ${P(cx+r,cy-k)} ${P(cx+r,cy)} c ${op}`)};
+const radio=(cx,cy,sel)=>{ops.push("0 0.2 0.6 RG 1.1 w");circ(cx,cy,3.7,"S");if(sel){ops.push("0 0.2 0.6 rg");circ(cx,cy,2.2,"f")}};
+function ctext(x,top,h,w,lines,sz,b,col,al){const lh=sz*1.25,t0=top-(h-lines.length*lh)/2;lines.forEach((l,j)=>{const tx=al==="c"?x+(w-tw(l,sz,b))/2:x+4;runs(tx,t0-j*lh-sz*0.95,l,sz,b,col||"0 g")})}
+function para(t,sz,b,col,gap,ind){const lh=sz*1.28,L=wrapT(t,CW-(ind||0),sz,b);L.forEach(l=>{if(y-lh<MB)np();y-=lh;runs(MX+(ind||0),y+lh*0.22,l,sz,b,col||"0 g")});y-=gap||0}
+function keep(fn){const pi=pages.length-1,li=ops.length,sy=y;fn();if(pages.length-1>pi&&sy<PH-MT-1){pages.length=pi+1;ops=pages[pi];ops.length=li;y=sy;np();fn()}}
+function gridQ(q){const w1=230,k=q.o.length,wc=(CW-w1)/k,H=q.o.map(o=>wrapT(o,wc-8,7.5,true)),F=wrapT(q.x||"",w1-8,7.5,true);
+const hh=Math.max(F.length,...H.map(a=>a.length))*9.4+9;if(y-hh<MB)np();
+rect(MX,y,CW,hh,HF);ctext(MX,y,hh,w1,F,7.5,true);H.forEach((l,j)=>ctext(MX+w1+j*wc,y,hh,wc,l,7.5,true,"0 g","c"));y-=hh;
+q.r.forEach((r,i)=>{const L=wrapT(r,w1-8,8,false),rh=Math.max(19,L.length*10+8),v=st[`q${q.n}_c${i}`];if(y-rh<MB)np();
+ctext(MX,y,rh,w1,L,8,false);for(let j=0;j<k;j++)radio(MX+w1+(j+.5)*wc,y-rh/2,v!==undefined&&+v===j);hln(MX,MX+CW,y-rh);y-=rh})}
+function facQ(q){const k=q.c.length,w1=252,gw=(CW-w1)/k,cw=gw/6;
+String(q.l||"").split(" · ").forEach(l=>para(l,7.5,false,GR,0));y-=5;
+const G=q.c.map(c=>wrapT(c,gw-12,7.5,true)),h1=Math.max(...G.map(a=>a.length))*9.4+7,h2=13;if(y-h1-h2<MB)np();
+rect(MX,y,CW,h1+h2,HF);G.forEach((l,j)=>ctext(MX+w1+j*gw,y,h1,gw,l,7.5,true,"0 g","c"));
+for(let j=0;j<k;j++)SYM.forEach((sy,v)=>{const c=MX+w1+j*gw+(v+.5)*cw;txt(c-tw(sy,7,false)/2,y-h1-9,sy,7,false,GR)});
+y-=h1+h2;
+q.r.forEach((r,i)=>{if(r[0]==="#"){if(y-17<MB)np();rect(MX,y,CW,17,HF);ctext(MX,y,17,CW,[r.slice(1)],8,true);y-=17;return}
+const oth=r[0]==="?",lab=oth?r.slice(1):r,L=wrapT(lab,w1-8,8,false),rh=oth?38:Math.max(19,L.length*10+8);if(y-rh<MB)np();
+const top=y;if(oth){ctext(MX,top,22,w1,L,8,false);box(MX+4,top-22,w1-10,13);let t=(st[`q${q.n}_r${i}_t`]||"");while(t&&tw(t,7.5,false)>w1-18)t=t.slice(0,-1);txt(MX+8,top-31.5,t,7.5,false)}else ctext(MX,top,rh,w1,L,8,false);
+for(let j=0;j<k;j++){vln(MX+w1+j*gw,top,top-rh);for(let v=0;v<6;v++){const sv=st[`q${q.n}_r${i}_c${j}`];radio(MX+w1+j*gw+(v+.5)*cw,oth?top-12:top-rh/2,sv!==undefined&&+sv===v)}}
+hln(MX,MX+CW,top-rh);y-=rh})}
+function freeQ(q){const t=(st["q"+q.n]||"").trim(),L=wrapT(t,CW-14,9,false),h=Math.max(100,L.length*11.5+14);if(y-h<MB)np();
+box(MX,y,CW,h,"0.55 0.58 0.65 RG");L.forEach((l,j)=>txt(MX+7,y-14-j*11.5,l,9,false));y-=h}
+function question(q){para(q.n+". "+q.t+" *",9,true,BL,2);if(q.p)para(q.p,8.5,false,GR,2);
+if(q.k==="g")gridQ(q);else if(q.k==="f")facQ(q);else freeQ(q);y-=16}
+// page 1
+para("Enquête sur la distribution des crédits bancaires",20,true,BL,8);
+para("Version PDF de vos réponses, générée le "+new Date().toLocaleString("fr-FR")+", pour relecture avant envoi (rien n’a encore été transmis). Les numéros entre crochets renvoient aux définitions en fin de document. Les questions marquées d’un * sont obligatoires.",8.5,false,GR,10);
+{const by=y;runs(MX,by-11,"Nom de la banque *",9,true,"0 g");box(MX+125,by,310,16);txt(MX+130,by-11.5,st.respondent||"",9,false);y-=32}
+secs.forEach(a=>a.forEach((q,qi)=>keep(()=>{if(qi===0){rect(MX,y,CW,20,BL);runs(MX+6,y-14,a[0].h||"",10,true,"1 g");y-=34}question(q)})));
+// définitions
+np();para("Définitions et indications",14,true,BL,8);
+Object.keys(DEF).forEach(k=>{const t=DEF[k],i=t.indexOf(":"),hd=i>0&&i<90;if(y<MB+40)np();para("["+k+"] "+(hd?t.slice(0,i).trim():""),8,true,BL,0);para(hd?t.slice(i+1).trim():t,7.5,false,"0 g",6)});
+// pieds de page
+pages.forEach((p,i)=>{p.push(`${GR} BT /F1 7 Tf 1 0 0 1 ${MX} 20 Tm ${pesc("Enquête sur la distribution des crédits bancaires – Questionnaire BCT – version PDF des réponses (non envoyées)")} Tj ET`);
+const pg="Page "+(i+1);p.push(`${GR} BT /F1 7 Tf 1 0 0 1 ${f2(PW-MX-tw(pg,7))} 20 Tm ${pesc(pg)} Tj ET`)});
+// assemblage
+const N=pages.length,objs=[];objs[1]="<</Type/Catalog/Pages 2 0 R>>";
+objs[2]="<</Type/Pages/Kids ["+pages.map((_,i)=>(5+2*i)+" 0 R").join(" ")+"]/Count "+N+">>";
+objs[3]="<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>";
+objs[4]="<</Type/Font/Subtype/Type1/BaseFont/Helvetica-Bold/Encoding/WinAnsiEncoding>>";
+pages.forEach((p,i)=>{const c=p.join("\n");objs[5+2*i]=`<</Type/Page/Parent 2 0 R/MediaBox [0 0 ${PW} ${PH}]/Resources<</Font<</F1 3 0 R/F2 4 0 R>>>>/Contents ${6+2*i} 0 R>>`;
+objs[6+2*i]=`<</Length ${c.length}>>\nstream\n${c}\nendstream`});
+let out="%PDF-1.4\n",off=[];for(let i=1;i<objs.length;i++){off[i]=out.length;out+=`${i} 0 obj\n${objs[i]}\nendobj\n`}
+const xo=out.length;out+=`xref\n0 ${objs.length}\n0000000000 65535 f \n`+off.slice(1).map(o=>String(o).padStart(10,"0")+" 00000 n \n").join("")+`trailer\n<</Size ${objs.length}/Root 1 0 R>>\nstartxref\n${xo}\n%%EOF`;
+return Uint8Array.from(out,c=>c.charCodeAt(0))}
+const pdfName=()=>"BLS_consultation_"+(st.respondent||"banque").replace(/[^\w\-]+/g,"_").slice(0,40)+".pdf";
+document.getElementById("b5").onclick=()=>{
+msg.textContent="";if(showErr()){document.getElementById("err").scrollIntoView({block:"center",behavior:"smooth"});return}
+try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([pdfBytes()],{type:"application/pdf"}));a.download=pdfName();document.body.appendChild(a);a.click();a.remove();
+msg.textContent="Le PDF de vos réponses a été téléchargé. Relisez-le, puis cliquez sur « Finaliser et envoyer » pour transmettre vos réponses."}
+catch(e){msg.textContent="Impossible de générer le PDF ("+(e.message||"erreur")+"). Vos réponses sont conservées sur cette page."}};
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxLuTYS2hLVq5KPCgZjW-RiBlm5NzmuawrUYVJqTdMXrx5iRFwybp3OjVzYgJZndcnX7Q/exec";
 const sb=document.getElementById("b6");
 new MutationObserver(()=>{if(msg.textContent)msg.scrollIntoView({block:"center",behavior:"smooth"})}).observe(msg,{childList:true,characterData:true,subtree:true});
 const toB64=blob=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=()=>rej(new Error("lecture"));r.readAsDataURL(blob)});
 sb.onclick=async()=>{
-if(!st.respondent){msg.textContent="Merci d’indiquer d’abord le nom de la banque (en haut de page).";document.querySelector("[name=respondent]").focus();return}
-const s=stat();if(s.ans<s.tot){prog();return}
+msg.textContent="";if(showErr()){document.getElementById("err").scrollIntoView({block:"center",behavior:"smooth"});return}
 msg.textContent="Envoi en cours…";window.busy=true;sb.disabled=true;
 try{
 if(SCRIPT_URL.indexOf("COLLER_ICI")===0)throw new Error("configuration");
