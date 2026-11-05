@@ -65,7 +65,7 @@ tr.oth.has td.l::before{content:"* ";color:#e11d2e;font-weight:700}
 <div class="pgw" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pgt"><span>Progression</span><span id="pgv">0 %</span></div><div class="pgb"><div id="pgf"></div></div></div></header>
 <div id="intro"><div class="sub">Une seule case à cocher par ligne (tableaux simples) ou par ligne et par colonne (tableaux de facteurs). Les numéros entre crochets renvoient aux définitions en bas de page. Les questions marquées d’un <span class="req">*</span> sont obligatoires. Cliquez sur l’intitulé d’une section pour afficher ou masquer ses questions ; une section terminée se replie automatiquement et la suivante s’ouvre ; un simple clic sur l’intitulé la rouvre.</div>
 <label class="lab" for="resp">Nom de la banque <span class="req">*</span></label>
-<input type="text" id="resp" class="tx" name="respondent" placeholder="Nom de la banque" style="max-width:420px;margin-top:10px"></div>
+<select id="resp" class="tx" name="respondent" style="max-width:420px;margin-top:10px;cursor:pointer"><option value="" disabled selected>— Sélectionnez votre banque —</option><option value="Al Baraka Bank">Al Baraka Bank</option><option value="Al Wifak International Bank">Al Wifak International Bank</option><option value="Amen Bank">Amen Bank</option><option value="Arab Tunisian Bank (ATB)">Arab Tunisian Bank (ATB)</option><option value="Attijari Bank">Attijari Bank</option><option value="Bank ABC Tunisie">Bank ABC Tunisie</option><option value="Banque de Financement des Petites et Moyennes entreprises (BFPME)">Banque de Financement des Petites et Moyennes entreprises (BFPME)</option><option value="Banque de l’Habitat (BH)">Banque de l’Habitat (BH)</option><option value="Banque de Tunisie (BT)">Banque de Tunisie (BT)</option><option value="Banque de Tunisie et des Emirats (BTE)">Banque de Tunisie et des Emirats (BTE)</option><option value="Banque Internationale Arabe de Tunisie (BIAT)">Banque Internationale Arabe de Tunisie (BIAT)</option><option value="Banque Nationale Agricole (BNA)">Banque Nationale Agricole (BNA)</option><option value="Banque Tunisienne de Solidarité (BTS)">Banque Tunisienne de Solidarité (BTS)</option><option value="Banque Tuniso Koweitienne (BTK)">Banque Tuniso Koweitienne (BTK)</option><option value="Banque Tuniso-Libyenne (BTL)">Banque Tuniso-Libyenne (BTL)</option><option value="Banque Zitouna">Banque Zitouna</option><option value="Citi Bank">Citi Bank</option><option value="Qatar National Bank- Tunis (QNB-Tunis)">Qatar National Bank- Tunis (QNB-Tunis)</option><option value="Société Tunisienne de Banque (STB)">Société Tunisienne de Banque (STB)</option><option value="Tunisian Saudi Bank (TSB)">Tunisian Saudi Bank (TSB)</option><option value="Union Bancaire de Commerce et d’Industrie (UBCI)">Union Bancaire de Commerce et d’Industrie (UBCI)</option><option value="Union Internationale de Banque (UIB)">Union Internationale de Banque (UIB)</option></select></div>
 <div id="qs"></div>
 <details class="q" id="defs"><summary><b>Définitions et indications</b></summary><div id="deflist"></div></details>
 <div class="bar"><button id="b5" class="sec">Consulter mes réponses (PDF)</button><button id="b6">Finaliser et envoyer</button><span class="sub hint" id="hint"></span><div class="err" id="err" role="alert" hidden></div><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
@@ -134,7 +134,7 @@ syncOth(false);prog();first=false;
 const msg=document.getElementById("msg");
 document.getElementById("deflist").innerHTML=Object.keys(DEF).map(k=>{const t=DEF[k],i=t.indexOf(":"),hd=i>0&&i<90;return `<p id="d${k}"><b>[${k}] ${hd?esc(t.slice(0,i)):""}</b>${hd?" :"+esc(t.slice(i+1)):" "+esc(t)}</p>`}).join("");
 document.addEventListener("click",e=>{const f=e.target.closest(".fn");if(!f)return;document.getElementById("defs").open=true;const t=document.getElementById("d"+f.dataset.n);if(t){t.scrollIntoView({block:"center"});t.style.background="var(--hd)"}});
-document.querySelector("[name=respondent]").value=st.respondent||"";
+{const r=document.querySelector("[name=respondent]");r.value=st.respondent||"";if(r.value!==(st.respondent||"")){delete st.respondent;try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}}prog()}
 
 // === Génération du fichier Excel + téléchargement + e-mail pré-rempli ===
 const MAIL_TO="zitoun.mariem@gmail.com";
@@ -186,7 +186,7 @@ location.href="mailto:"+MAIL_TO+"?subject="+encodeURIComponent("BLS – Réponse
 const RESET_AFTER_SEND=true; // true = après l'envoi, le questionnaire est remis à zéro (réponses effacées)
 function resetAll(){st={};try{localStorage.removeItem("blsq")}catch(_){}
 document.querySelectorAll("input[type=radio]").forEach(i=>{i.checked=false});
-document.querySelectorAll("input[type=text],textarea").forEach(i=>{i.value=""});syncOth(false);rev=0;opn.fill(false);first=true;
+document.querySelectorAll("input[type=text],textarea").forEach(i=>{i.value=""});document.querySelector("[name=respondent]").value="";syncOth(false);rev=0;opn.fill(false);first=true;
 prog();first=false}
 
 // === Consultation des réponses : PDF généré sans bibliothèque ===
