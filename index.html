@@ -61,11 +61,12 @@ button:disabled{opacity:.45;cursor:not-allowed}
 tr.oth:not(.has) td.oc input{visibility:hidden}
 tr.oth.has td.l::before{content:"* ";color:#e11d2e;font-weight:700}
 </style></head><body><main>
-<header class="top"><h1>Enquête sur la distribution des crédits bancaires</h1>
+<header class="top">
 <div class="pgw" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pgt"><span>Progression</span><span id="pgv">0 %</span></div><div class="pgb"><div id="pgf"></div></div></div></header>
 <div id="intro"><div class="sub">Une seule case à cocher par ligne (tableaux simples) ou par ligne et par colonne (tableaux de facteurs). Les numéros entre crochets renvoient aux définitions en bas de page. Les questions marquées d’un <span class="req">*</span> sont obligatoires. Cliquez sur l’intitulé d’une section pour afficher ou masquer ses questions ; une section terminée se replie automatiquement et la suivante s’ouvre ; un simple clic sur l’intitulé la rouvre.</div>
-<label class="lab" for="resp">Nom de la banque <span class="req">*</span></label>
-<select id="resp" class="tx" name="respondent" style="max-width:420px;margin-top:10px;cursor:pointer"><option value="" disabled selected>— Sélectionnez votre banque —</option><option value="Al Baraka Bank">Al Baraka Bank</option><option value="Al Wifak International Bank">Al Wifak International Bank</option><option value="Amen Bank">Amen Bank</option><option value="Arab Tunisian Bank (ATB)">Arab Tunisian Bank (ATB)</option><option value="Attijari Bank">Attijari Bank</option><option value="Bank ABC Tunisie">Bank ABC Tunisie</option><option value="Banque de Financement des Petites et Moyennes entreprises (BFPME)">Banque de Financement des Petites et Moyennes entreprises (BFPME)</option><option value="Banque de l’Habitat (BH)">Banque de l’Habitat (BH)</option><option value="Banque de Tunisie (BT)">Banque de Tunisie (BT)</option><option value="Banque de Tunisie et des Emirats (BTE)">Banque de Tunisie et des Emirats (BTE)</option><option value="Banque Internationale Arabe de Tunisie (BIAT)">Banque Internationale Arabe de Tunisie (BIAT)</option><option value="Banque Nationale Agricole (BNA)">Banque Nationale Agricole (BNA)</option><option value="Banque Tunisienne de Solidarité (BTS)">Banque Tunisienne de Solidarité (BTS)</option><option value="Banque Tuniso Koweitienne (BTK)">Banque Tuniso Koweitienne (BTK)</option><option value="Banque Tuniso-Libyenne (BTL)">Banque Tuniso-Libyenne (BTL)</option><option value="Banque Zitouna">Banque Zitouna</option><option value="Citi Bank">Citi Bank</option><option value="Qatar National Bank- Tunis (QNB-Tunis)">Qatar National Bank- Tunis (QNB-Tunis)</option><option value="Société Tunisienne de Banque (STB)">Société Tunisienne de Banque (STB)</option><option value="Tunisian Saudi Bank (TSB)">Tunisian Saudi Bank (TSB)</option><option value="Union Bancaire de Commerce et d’Industrie (UBCI)">Union Bancaire de Commerce et d’Industrie (UBCI)</option><option value="Union Internationale de Banque (UIB)">Union Internationale de Banque (UIB)</option></select></div>
+<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start"><div style="flex:1 1 320px;max-width:420px"><label class="lab" for="resp">Nom de la banque <span class="req">*</span></label>
+<select id="resp" class="tx" name="respondent" style="max-width:420px;margin-top:10px;cursor:pointer"><option value="" disabled selected>— Sélectionnez votre banque —</option><option value="Al Baraka Bank">Al Baraka Bank</option><option value="Al Wifak International Bank">Al Wifak International Bank</option><option value="Amen Bank">Amen Bank</option><option value="Arab Tunisian Bank (ATB)">Arab Tunisian Bank (ATB)</option><option value="Attijari Bank">Attijari Bank</option><option value="Bank ABC Tunisie">Bank ABC Tunisie</option><option value="Banque de Financement des Petites et Moyennes entreprises (BFPME)">Banque de Financement des Petites et Moyennes entreprises (BFPME)</option><option value="Banque de l’Habitat (BH)">Banque de l’Habitat (BH)</option><option value="Banque de Tunisie (BT)">Banque de Tunisie (BT)</option><option value="Banque de Tunisie et des Emirats (BTE)">Banque de Tunisie et des Emirats (BTE)</option><option value="Banque Internationale Arabe de Tunisie (BIAT)">Banque Internationale Arabe de Tunisie (BIAT)</option><option value="Banque Nationale Agricole (BNA)">Banque Nationale Agricole (BNA)</option><option value="Banque Tunisienne de Solidarité (BTS)">Banque Tunisienne de Solidarité (BTS)</option><option value="Banque Tuniso Koweitienne (BTK)">Banque Tuniso Koweitienne (BTK)</option><option value="Banque Tuniso-Libyenne (BTL)">Banque Tuniso-Libyenne (BTL)</option><option value="Banque Zitouna">Banque Zitouna</option><option value="Citi Bank">Citi Bank</option><option value="Qatar National Bank- Tunis (QNB-Tunis)">Qatar National Bank- Tunis (QNB-Tunis)</option><option value="Société Tunisienne de Banque (STB)">Société Tunisienne de Banque (STB)</option><option value="Tunisian Saudi Bank (TSB)">Tunisian Saudi Bank (TSB)</option><option value="Union Bancaire de Commerce et d’Industrie (UBCI)">Union Bancaire de Commerce et d’Industrie (UBCI)</option><option value="Union Internationale de Banque (UIB)">Union Internationale de Banque (UIB)</option></select></div><div style="flex:1 1 260px;max-width:340px"><label class="lab" for="email">Email <span class="req">*</span></label>
+<input type="email" id="email" class="tx" name="email" autocomplete="email" inputmode="email" style="margin-top:10px"></div></div></div>
 <div id="qs"></div>
 <details class="q" id="defs"><summary><b>Définitions et indications</b></summary><div id="deflist"></div></details>
 <div class="bar"><button id="b5" class="sec">Consulter mes réponses (PDF)</button><button id="b6">Finaliser et envoyer</button><span class="sub hint" id="hint"></span><div class="err" id="err" role="alert" hidden></div><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
@@ -94,16 +95,19 @@ const secs=[];Q.forEach(q=>{if(q.h||!secs.length)secs.push([]);secs[secs.length-
 const secOf={};secs.forEach((a,i)=>a.forEach(q=>secOf[q.n]=i));
 document.getElementById("qs").innerHTML=secs.map((a,i)=>`<div class=sec data-i="${i}"><h2 role=button tabindex=0 aria-expanded="false"><span class=chv>▾</span><span>${a[0].h||""}</span><span class=lk>Complétez la section précédente pour l’ouvrir</span></h2><div class=sb>`+a.map(q=>`<section class=q id="qq${q.n}"><h3><b>${q.n}.</b> ${fn(q.t)} <span class="req" title="Question obligatoire">*</span></h3>${q.p?`<div class=p>${fn(q.p)}</div>`:""}${q.k=="g"?grid(q):q.k=="f"?fac(q):txt(q)}</section>`).join("")+`</div></div>`).join("");
 let rev=0,first=true,errOn=false;
+const okMail=()=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((st.email||"").trim());
 function missing(){const set=new Set();for(const k of Object.keys(meta)){const m=meta[k];if(m[1]){if((!opt.has(k)||(st[k.replace(/_c\d+$/,"_t")]||"").trim()!=="")&&st[k]===undefined)set.add(+m[2])}else if(/^q\d+$/.test(k)&&(st[k]||"").trim()==="")set.add(+m[2])}return[...set].sort((a,b)=>a-b)}
-function showErr(){const e=document.getElementById("err"),mq=missing(),nb=!st.respondent;
-if(!mq.length&&!nb){e.hidden=true;e.innerHTML="";errOn=false;return false}
+function showErr(){const e=document.getElementById("err"),mq=missing(),nb=!st.respondent,ne=!okMail();
+if(!mq.length&&!nb&&!ne){e.hidden=true;e.innerHTML="";errOn=false;return false}
 errOn=true;let h="";
 if(nb)h+=`<div>Le nom de la banque n’est pas renseigné. <a href="#" data-bank="1">Aller au champ</a></div>`;
+if(ne)h+=`<div>${(st.email||"").trim()?"L’adresse email n’est pas valide.":"L’adresse email n’est pas renseignée."} <a href="#" data-email="1">Aller au champ</a></div>`;
 if(mq.length)h+=`<div>${mq.length>1?"Questions obligatoires sans réponse":"Question obligatoire sans réponse"} : `+mq.map(n=>`<a href="#qq${n}" data-q="${n}">${n}</a>`).join(", ")+`</div>`;
 e.innerHTML=h;e.hidden=false;return true}
 function goQ(n){const i=secOf[n];if(i===undefined)return;if(i>rev)rev=i;opn[i]=true;paint();const el=document.getElementById("qq"+n);if(!el)return;
 el.scrollIntoView({block:"start",behavior:"smooth"});el.classList.add("hl");setTimeout(()=>el.classList.remove("hl"),2500)}
 document.getElementById("err").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;e.preventDefault();
+if(a.dataset.email){const i=document.getElementById("email");i.scrollIntoView({block:"center",behavior:"smooth"});i.focus();return}
 if(a.dataset.bank){const i=document.querySelector("[name=respondent]");i.scrollIntoView({block:"center",behavior:"smooth"});i.focus();return}
 goQ(+a.dataset.q)});
 function secDone(i){const inS=k=>secOf[meta[k][2]]===i,ks=Object.keys(meta),
@@ -121,9 +125,9 @@ function tgl(h){const e=h.closest(".sec"),i=+e.dataset.i;if(i>rev)return;opn[i]=
 document.getElementById("qs").addEventListener("click",e=>{const h=e.target.closest("h2");if(h)tgl(h)});
 document.getElementById("qs").addEventListener("keydown",e=>{const h=e.target.closest&&e.target.closest("h2");if(h&&(e.key==="Enter"||e.key===" ")){e.preventDefault();tgl(h)}});
 function stat(){const a=Object.keys(meta).filter(k=>meta[k][1]&&(!opt.has(k)||(st[k.replace(/_c\d+$/,"_t")]||"").trim()!=="")),t=Object.keys(meta).filter(k=>!meta[k][1]&&/^q\d+$/.test(k));return{tot:a.length+t.length,ans:a.filter(k=>st[k]!==undefined).length+t.filter(k=>(st[k]||"").trim()!=="").length}}
-function prog(){const s=stat(),p=s.tot?Math.round(100*s.ans/s.tot):0,ok=s.ans===s.tot&&!!st.respondent;
+function prog(){const s=stat(),p=s.tot?Math.round(100*s.ans/s.tot):0,ok=s.ans===s.tot&&!!st.respondent&&okMail();
 document.getElementById("pgf").style.width=p+"%";document.getElementById("pgv").textContent=`${p} %`;document.querySelector(".pgw").setAttribute("aria-valuenow",p);
-const hn=document.getElementById("hint");if(hn)hn.textContent=ok?"":"Pour finaliser, le nom de la banque et toutes les questions obligatoires (*) doivent être renseignés.";if(errOn)showErr();reveal()}
+const hn=document.getElementById("hint");if(hn)hn.textContent=ok?"":"Pour finaliser, le nom de la banque, l’email et toutes les questions obligatoires (*) doivent être renseignés.";if(errOn)showErr();reveal()}
 function syncOth(clear){document.querySelectorAll("tr.oth").forEach(tr=>{const t=tr.querySelector("input[type=text]"),has=t.value.trim()!=="";tr.classList.toggle("has",has);if(!has&&clear)tr.querySelectorAll("input[type=radio]").forEach(r=>{r.checked=false;delete st[r.name]})})}
 function sv(e){const t=e.target;if(!t.name)return;if(t.type==="radio"&&!t.checked)delete st[t.name];else st[t.name]=t.value;if(t.type==="text")syncOth(true);try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}prog()}
 document.addEventListener("change",sv);document.addEventListener("input",sv);
@@ -134,11 +138,11 @@ syncOth(false);prog();first=false;
 const msg=document.getElementById("msg");
 document.getElementById("deflist").innerHTML=Object.keys(DEF).map(k=>{const t=DEF[k],i=t.indexOf(":"),hd=i>0&&i<90;return `<p id="d${k}"><b>[${k}] ${hd?esc(t.slice(0,i)):""}</b>${hd?" :"+esc(t.slice(i+1)):" "+esc(t)}</p>`}).join("");
 document.addEventListener("click",e=>{const f=e.target.closest(".fn");if(!f)return;document.getElementById("defs").open=true;const t=document.getElementById("d"+f.dataset.n);if(t){t.scrollIntoView({block:"center"});t.style.background="var(--hd)"}});
-{const r=document.querySelector("[name=respondent]");r.value=st.respondent||"";if(r.value!==(st.respondent||"")){delete st.respondent;try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}}prog()}
+{document.getElementById("email").value=st.email||"";const r=document.querySelector("[name=respondent]");r.value=st.respondent||"";if(r.value!==(st.respondent||"")){delete st.respondent;try{localStorage.setItem("blsq",JSON.stringify(st))}catch(_){}}prog()}
 
 // === Génération du fichier Excel + téléchargement + e-mail pré-rempli ===
 const MAIL_TO="zitoun.mariem@gmail.com";
-function summary(){const o=["ENQUÊTE SUR LA DISTRIBUTION DES CRÉDITS BANCAIRES – RÉPONSES","Répondant : "+(st.respondent||""),"Date : "+new Date().toISOString(),""];
+function summary(){const o=["ENQUÊTE SUR LA DISTRIBUTION DES CRÉDITS BANCAIRES – RÉPONSES","Répondant : "+(st.respondent||""),"Email : "+(st.email||""),"Date : "+new Date().toISOString(),""];
 for(const k in meta){const v=st[k];if(v===undefined||v==="")continue;const m=meta[k];o.push(m[0]+" : "+(m[1]?m[1][v]:v))}return o.join("\n")}
 
 // --- Génération d'un vrai fichier .xlsx (sans bibliothèque externe) ---
@@ -162,7 +166,7 @@ const qt={};Q.forEach(q=>qt[q.n]=clean(q.t));
 const rows=[["Banque","N° question","Question","Élément","Colonne / précision","Réponse"]];
 for(const k in meta){const v=st[k];if(v===undefined||v==="")continue;const m=meta[k];
 rows.push([st.respondent||"",m[2],qt[m[2]]||"",m[3],m[4],m[1]?m[1][v]:v])}
-const info=[["Champ","Valeur"],["Banque",st.respondent||""],["Date d’envoi",new Date().toLocaleString("fr-FR")],["Nombre de réponses",String(rows.length-1)]];
+const info=[["Champ","Valeur"],["Banque",st.respondent||""],["Email",st.email||""],["Date d’envoi",new Date().toLocaleString("fr-FR")],["Nombre de réponses",String(rows.length-1)]];
 const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',NS='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',RT="http://schemas.openxmlformats.org/officeDocument/2006/relationships";
 return zip([
 {name:"[Content_Types].xml",data:X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'},
@@ -186,7 +190,7 @@ location.href="mailto:"+MAIL_TO+"?subject="+encodeURIComponent("BLS – Réponse
 const RESET_AFTER_SEND=true; // true = après l'envoi, le questionnaire est remis à zéro (réponses effacées)
 function resetAll(){st={};try{localStorage.removeItem("blsq")}catch(_){}
 document.querySelectorAll("input[type=radio]").forEach(i=>{i.checked=false});
-document.querySelectorAll("input[type=text],textarea").forEach(i=>{i.value=""});document.querySelector("[name=respondent]").value="";syncOth(false);rev=0;opn.fill(false);first=true;
+document.querySelectorAll("input[type=text],input[type=email],textarea").forEach(i=>{i.value=""});document.querySelector("[name=respondent]").value="";syncOth(false);rev=0;opn.fill(false);first=true;
 prog();first=false}
 
 // === Consultation des réponses : PDF généré sans bibliothèque ===
@@ -235,7 +239,7 @@ if(q.k==="g")gridQ(q);else if(q.k==="f")facQ(q);else freeQ(q);y-=16}
 // page 1
 para("Enquête sur la distribution des crédits bancaires",20,true,BL,8);
 para("Version PDF de vos réponses, générée le "+new Date().toLocaleString("fr-FR")+", pour relecture avant envoi (rien n’a encore été transmis). Les numéros entre crochets renvoient aux définitions en fin de document. Les questions marquées d’un * sont obligatoires.",8.5,false,GR,10);
-{const by=y;runs(MX,by-11,"Nom de la banque *",9,true,"0 g");box(MX+125,by,310,16);txt(MX+130,by-11.5,st.respondent||"",9,false);y-=32}
+{const by=y;runs(MX,by-11,"Nom de la banque *",9,true,"0 g");box(MX+125,by,310,16);txt(MX+130,by-11.5,st.respondent||"",9,false);runs(MX+450,by-11,"Email *",9,true,"0 g");box(MX+495,by,285,16);txt(MX+500,by-11.5,st.email||"",9,false);y-=32}
 secs.forEach(a=>a.forEach((q,qi)=>keep(()=>{if(qi===0){rect(MX,y,CW,20,BL);runs(MX+6,y-14,a[0].h||"",10,true,"1 g");y-=34}question(q)})));
 // définitions
 np();para("Définitions et indications",14,true,BL,8);
@@ -268,7 +272,7 @@ msg.textContent="";if(showErr()){document.getElementById("err").scrollIntoView({
 msg.textContent="Envoi en cours…";window.busy=true;sb.disabled=true;
 try{
 if(SCRIPT_URL.indexOf("COLLER_ICI")===0)throw new Error("configuration");
-const payload=JSON.stringify({respondent:st.respondent,filename:xlsxName(),summary:summary(),xlsx:await toB64(buildXlsx())});
+const payload=JSON.stringify({respondent:st.respondent,email:(st.email||"").trim(),filename:xlsxName(),summary:summary(),xlsx:await toB64(buildXlsx())});
 await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:payload});
 sb.textContent="Envoyé ✔";sb.disabled=true;delete sb.dataset.c;
 msg.textContent="";
